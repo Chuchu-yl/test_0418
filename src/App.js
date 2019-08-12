@@ -9,12 +9,10 @@ export default class App extends Component{
     render(){
         return(
             <BrowserRouter>
-                <div>
                     <Switch>
                         <Route path='/login' component={Login}/>
                         <Route path='/' component={Admin}/>
                     </Switch>
-                </div>
             </BrowserRouter>
         
         )
