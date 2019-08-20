@@ -80,7 +80,7 @@ import memoryUtils from '../../utils/memoryUtils';
                             {getFieldDecorator('username', {
                                 initialValue: 'admin', // 初始值
                                 rules: [
-                                    { required: true,whitespace:true, message: '请输入内容!' },
+                                    {required: true,whitespace:true, message: '请输入内容!' },
                                     {min:4,message:'用户名必须大于4位！'},
                                     {max:12,message:'用户名必须小于12位！'},
                                     {pattern:/^[a-zA-Z0-9_]+$/,message:'请输入正确的字符！'}

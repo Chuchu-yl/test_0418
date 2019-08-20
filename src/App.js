@@ -1,5 +1,4 @@
 import React,{Component}from 'react'
-import {Button} from 'antd'
 import Login from './pages/login/Login'
 import Admin from './pages/admin/Admin'
 import {BrowserRouter,Route,Switch} from 'react-router-dom'
@@ -14,7 +13,6 @@ export default class App extends Component{
                         <Route path='/' component={Admin}/>
                     </Switch>
             </BrowserRouter>
-        
         )
     }
 }

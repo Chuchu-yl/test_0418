@@ -4,6 +4,7 @@ import {Redirect,Switch,Route} from 'react-router-dom'
 import { Layout } from 'antd';
 import LeftNav from '../../components/left-nav/LeftNav'
 import Header from '../../components/header/Header'
+import NotFound from "../not-found-404/notfound";
 
 import Category from '../category/category'
 import Home from '../home/home'
@@ -33,6 +34,7 @@ export default class Admin extends React.Component{
                         <Content style={{ margin:20,background:'white',}}>
                     {/* 这里放入各种路由组件 */}
                             <Switch>
+                                <Redirect from='/' to='/home' exact/>
                                 <Route path='/home' component={Home}/>
                                 <Route path='/category' component={Category} />
                                 <Route path='/product' component={Product} />
@@ -41,7 +43,8 @@ export default class Admin extends React.Component{
                                 <Route path='/charts/bar' component={Bar} />
                                 <Route path='/charts/line' component={Line} />
                                 <Route path='/charts/pie' component={Pie} />
-                                <Redirect to='/category'/>
+                                {/* <Redirect to='/category'/> */}
+                                <Route component={NotFound} />
                             </Switch>
                         </Content>
                         <Footer style={{color:'#aaaaaa',textAlign:'center'}}>

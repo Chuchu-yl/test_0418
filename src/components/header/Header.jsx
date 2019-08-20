@@ -76,7 +76,7 @@ import './header.less'
             if(item.key === path){
                 title=item.title
             }else if(item.children){
-                const citem=item.children.find((citem)=>citem.key===path)
+                const citem=item.children.find((citem)=>path.indexOf(citem.key)===0)
                 if (citem){
                     title=citem.title
                 }
@@ -105,6 +105,9 @@ import './header.less'
         从内存中读取名字user
         */
         const user=memoryUtils.user
+        // {
+        //     console.log(user)
+        // }
         const {currentTime,dayPictureUrl,weather}=this.state
         // console.log(this.state)
         return (
