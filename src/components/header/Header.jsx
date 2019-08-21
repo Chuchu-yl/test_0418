@@ -8,6 +8,8 @@ import {formateDate} from '../../utils/timerUtils'
 import {LinkButton} from '../../components/link-button'
 import { Modal } from 'antd';
 
+import {connect} from 'react-redux'
+
 import './header.less'
  class Header extends Component {
 
@@ -132,4 +134,11 @@ import './header.less'
         )
     }
 }
-export default withRouter(Header)
+// export default withRouter(Header)
+/*
+包装当前的ui组件为容器组件
+    容器组件：向UI组件传入特定的属性
+    一般属性：读取redux的状态数据交给UI组件显示
+    函数属性：包含dispatch（）更新状态的函数交给UI组件调用  6：8
+*/
+export default connect()(withRouter(Header))
