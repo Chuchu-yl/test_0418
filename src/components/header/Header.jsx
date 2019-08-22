@@ -8,6 +8,7 @@ import {formateDate} from '../../utils/timerUtils'
 import {LinkButton} from '../../components/link-button'
 import { Modal } from 'antd';
 
+import {logout} from '../../pages/redux/actions'
 import {connect} from 'react-redux'
 
 import './header.less'
@@ -53,11 +54,12 @@ import './header.less'
       title: '你确定要退出登录吗?',
     //   content: 'Some descriptions',
       onOk:()=> {
-        //确定退出登录的话，把内存和local中存储的信息删除掉
-        removeUser()
-        memoryUtils.user={}
-        //并且会回到login界面
-        this.props.history.replace('/login')
+        // //确定退出登录的话，把内存和local中存储的信息删除掉
+        // removeUser()
+        // memoryUtils.user={}
+        // //并且会回到login界面
+        // this.props.history.replace('/login')
+        this.props.logout()
       },
       onCancel() {
         console.log('取消');
@@ -102,11 +104,14 @@ import './header.less'
 
 
     render() {
-        const title=this.getTitle()
+        //得到当前请求对应的标题
+        // const title=this.getTitle()
+        const title =this.props.HeaderTitle
         /*
         从内存中读取名字user
         */
-        const user=memoryUtils.user
+        // const user=memoryUtils.user
+        const user=this.props.user
         // {
         //     console.log(user)
         // }
@@ -141,4 +146,11 @@ import './header.less'
     一般属性：读取redux的状态数据交给UI组件显示
     函数属性：包含dispatch（）更新状态的函数交给UI组件调用  6：8
 */
-export default connect()(withRouter(Header))
+export default connect(
+    //这里的state就是总状态。
+    state=>({
+        HeaderTitle:state.HeaderTitle,
+        user:state.User
+    }) ,  //传递一般属性
+    {logout}   //传递函数属性
+)(withRouter(Header))  //这时Header接收了一个HeaderTitle的属性。

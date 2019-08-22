@@ -24,6 +24,9 @@ componentWillMount() {
             const {getFieldDecorator} =this.props.form
         return (
         <Form {...formItemLayout}>
+            {/* <Item >
+                <Input></Input>
+            </Item> */}
             <Item label="角色名称" >
                 {getFieldDecorator('roleName ', {
                     initialValue: '',

@@ -1,10 +1,13 @@
 import React from 'react'
-import memoryUtils from '../../utils/memoryUtils'
+// import memoryUtils from '../../utils/memoryUtils'
 import {Redirect,Switch,Route} from 'react-router-dom'
 import { Layout } from 'antd';
 import LeftNav from '../../components/left-nav/LeftNav'
 import Header from '../../components/header/Header'
 import NotFound from "../not-found-404/notfound";
+
+import {connect} from 'react-redux'
+// import {login} from '../../pages/redux/actions'
 
 import Category from '../category/category'
 import Home from '../home/home'
@@ -16,10 +19,12 @@ import Line from '../charts/line'
 import Pie from '../charts/pie'
 
 const {  Footer, Sider, Content } = Layout;
-export default class Admin extends React.Component{
+class Admin extends React.Component{
 
         render(){
-            const user = memoryUtils.user
+            // const user = memoryUtils.user
+            const user=this.props.user
+            console.log(user)
             //如果当前用户没有登录，自动跳转到login界面
             if(!user._id){
               return <Redirect to='/login'/>   //在render（）中
@@ -55,3 +60,8 @@ export default class Admin extends React.Component{
             )
         }
 }
+
+export default connect(
+    state=>({user:state.User}),
+    {}
+)(Admin)

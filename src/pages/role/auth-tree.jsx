@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import {Tree} from 'antd'
+import {Tree,Form,Input} from 'antd'
 import menuList from '../../config/menuConfig'
 import PropTypes from 'prop-types'
 const TreeNode=Tree.TreeNode
-
+const Item = Form.Item
 
 export default class AuthTree extends React.Component {
  
@@ -59,16 +59,27 @@ export default class AuthTree extends React.Component {
     this.setState({ checkedKeys: menus })
   }
    
-
+ 
   render() {
     const {checkedKeys}=this.state
+    const {name} = this.props.role
+    console.log(name)
+    const formItemLayout = {
+        labelCol: { span: 4 },
+        wrapperCol: { span: 8 }
+      }
     return (
+        <div>
+            <Item label='角色名称' {...formItemLayout}>
+              <Input disabled value={name} />
+        </Item>
         <Tree
           checkable
           defaultExpandAll
           onCheck={this.handleCheck}  //手动选中的时候更新状态
           checkedKeys={checkedKeys}  //受控组件，自动更新选中状态
       >
+          
        <TreeNode title="平台权限" key="0-0">
             {
               this.getTreeNodes(menuList)
@@ -76,6 +87,7 @@ export default class AuthTree extends React.Component {
 
           </TreeNode>
       </Tree>
+        </div>
     )
         }
     }

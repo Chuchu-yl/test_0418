@@ -6,11 +6,12 @@ import {PAGE_SIZE} from '../../utils/constant'
 import {formateDate} from '../../utils/timerUtils'
 import AddForm from './add-form'
 import AuthTree from './auth-tree'
-import memoryUtils from '../../utils/memoryUtils'
+// import memoryUtils from '../../utils/memoryUtils'
+import {connect} from 'react-redux'
 /**
  * 角色管理
  */
-export default class Role extends Component { 
+ class Role extends Component { 
   state={
     roleList:[],
     showAdd:false,
@@ -68,7 +69,9 @@ updateRole=async ()=>{
   console.log(role)
     role.menus = this.Menus.current.getMenus()
     role.auth_time = Date.now()
-    role.auth_name = memoryUtils.user.username
+    //读取授权人名字
+    // role.auth_name = memoryUtils.user.username
+    role.auth_name=this.props.user.username
     const result =await reqAuth(role)
     if(result.status===0){
 
@@ -183,3 +186,7 @@ componentDidMount() {
   }
 }
 
+export default connect(
+  state=>({user:state.User}),
+  {}
+)(Role)

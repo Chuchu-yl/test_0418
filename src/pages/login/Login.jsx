@@ -5,6 +5,8 @@ import { Form, Icon, Input, Button,message } from 'antd';
 import {reqLogin} from '../../api'
 import {Redirect} from 'react-router-dom'
 import {savaUser} from '../../utils/storageUtils'
+import {connect} from 'react-redux'
+import {login} from '../redux/actions'
 
 import './login.less'
 import memoryUtils from '../../utils/memoryUtils';
@@ -22,24 +24,25 @@ import memoryUtils from '../../utils/memoryUtils';
             // console.log(values,username,password)
             this.props.form.validateFields(async (err, values) => {
                 if (!err) {
-                //   alert('验证通过')
-                const result=await reqLogin(values)
-                //判断，result.status为0，就说明登录请求成功
-                if(result.status===0){
-                    //返回的promise对象中的data数据需要存入到用户的浏览器中去
-                    //得到user（user就是data数据对象）
-                    const user =result.data
-                    //保存user（保存在local中，也要保存在内存中）
-                    //保存到local
-                    // localStorage.setItem('user_key',JSON.stringify(user)) //转换为json数据类型
-                    savaUser(user)
-                    //保存到内存
-                    memoryUtils.user=user  //对象中有了user数据
-                    //跳转到admin界面（编程式）
-                    this.props.history.replace('/')
-                }else{
-                    message.error(result.msg)
-                }
+                    this.props.login(values.username,values.password)
+                // //   alert('验证通过')
+                // const result=await reqLogin(values)
+                // //判断，result.status为0，就说明登录请求成功
+                // if(result.status===0){
+                //     //返回的promise对象中的data数据需要存入到用户的浏览器中去
+                //     //得到user（user就是data数据对象）
+                //     const user =result.data
+                //     //保存user（保存在local中，也要保存在内存中）
+                //     //保存到local
+                //     // localStorage.setItem('user_key',JSON.stringify(user)) //转换为json数据类型
+                //     savaUser(user)
+                //     //保存到内存
+                //     memoryUtils.user=user  //对象中有了user数据
+                //     //跳转到admin界面（编程式）
+                //     this.props.history.replace('/')
+                // }else{
+                //     message.error(result.msg)
+                // }
                 }
               })
         }
@@ -63,7 +66,11 @@ import memoryUtils from '../../utils/memoryUtils';
         render(){
             const { getFieldDecorator } = this.props.form;
             //如果已经登录，在地址中请求login，是不行的，转换到admin
-            const user = memoryUtils.user
+            // const user = memoryUtils.user
+            const user =this.props.user
+
+            console.log(user)
+
             if(user._id){
                 return <Redirect to='/'/>
             }
@@ -74,6 +81,7 @@ import memoryUtils from '../../utils/memoryUtils';
                         <p>后台管理系统</p>
                     </div>
                     <div className='login-content'>
+                        <div style={{color:'white',width:'100%',height:20,backgroundColor:'red',textAlign:"center"}}>{user.msg}</div>
                         <h1>用户登录</h1>
                         <Form onSubmit={this.handleSubmit} className="login-form">
                             <Form.Item>
@@ -119,4 +127,8 @@ import memoryUtils from '../../utils/memoryUtils';
 }
 
 const WrappedNormalLoginForm = Form.create()(Login);
-export default WrappedNormalLoginForm
+// export default WrappedNormalLoginForm
+export default connect(
+    state=>({user:state.User}),   //需要读取，属性中就有了user
+    {login}   //属性中就有了login
+)(WrappedNormalLoginForm)

@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import { Menu, Icon } from 'antd';
 import {Link,withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 import logo from '../../assets/images/logo.png'
 import menuList from '../../config/menuConfig'
 import memoryUtils from '../../utils/memoryUtils'
+import {setHeaderTitle} from '../../pages/redux/actions'  //这是返回action对象的工厂函数
+
 import './left-nav.less'
 const { SubMenu,Item } = Menu;
 
@@ -17,7 +20,8 @@ const { SubMenu,Item } = Menu;
     进行权限的设置
     */
    hasAuth=(item)=>{
-        const user=memoryUtils.user
+        // const user=memoryUtils.user
+        const user=this.props.user
         const menus=user.role.menus
         /*
         1.admin 
@@ -46,11 +50,15 @@ const { SubMenu,Item } = Menu;
 设置权限
 */
         if(this.hasAuth(item)){   //item对应的界面有可能有也有可能没有
+            //如果请求的路径与当前item的key一致，就把当前的item的title更新到redux的状态中
+            if(path.indexOf(item.key)===0){
+                this.props.setHeaderTitle(item.title)   //刷新的时候更新
+            }
             if (!item.children){
                 pre.push(
                     <Item key={item.key}>
-                        <Link to={item.key}>
-                            <Icon type={item.icon} />
+                        <Link to={item.key}  onClick={()=>this.props.setHeaderTitle(item.title)}>   {/*点击的时候更新*/}
+                            <Icon type={item.icon}/>
                             <span>{item.title}</span>
                         </Link>
                     </Item>
@@ -122,4 +130,15 @@ const { SubMenu,Item } = Menu;
         )
     }
 }
-export default withRouter(LeftNav)
+// export default withRouter(LeftNav)
+export default connect(
+    state=>({user:state.User}),
+    {setHeaderTitle}    //需要指定状态就需要传入工厂函数
+)(withRouter(LeftNav))
+
+/*
+给LeftNav传入的是一个重新定义的函数，里面有dispatch，dispatch中需要传入一个action函数对象，并执行
+function (...args){   //形参...args表示在打包（把多个数据搞到一个容器中）
+    dispatch(setHeaderTitle(...args))   //这里对args进行拆包
+}
+*/
